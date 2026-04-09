@@ -70,3 +70,9 @@ php artisan migrate
 
 # Start the server
 php artisan serve
+
+
+👨‍💻 Author
+
+Mubeen Zahid
+GitHub: https://github.com/MubeenZahid-294
