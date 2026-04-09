@@ -1,6 +1,3 @@
-# contact-book-crud-laravel
-Laravel Contact Management System
-
 # 📇 Laravel Contact Manager
 
 A modern and feature-rich **Contact Management System** built with Laravel.  
@@ -46,7 +43,7 @@ This project goes beyond basic CRUD and provides advanced functionalities like s
 
 ## 📸 Screenshots
 
-> https://drive.google.com/file/d/1qgXD5TZYq0i9X-FnzjR3HYUM-VNRVeX3/view?usp=drive_link
+👉 [View Screenshots](https://drive.google.com/file/d/1qgXD5TZYq0i9X-FnzjR3HYUM-VNRVeX3/view?usp=drive_link)
 
 ---
 
@@ -54,10 +51,10 @@ This project goes beyond basic CRUD and provides advanced functionalities like s
 
 ```bash
 # Clone the repository
-git clone https://github.com/MubeenZahid-294/laravel-contact-manager.git
+git clone https://github.com/MubeenZahid-294/contact-book-crud-laravel.git
 
 # Navigate into the project folder
-cd laravel-contact-book
+cd contact-book
 
 # Install dependencies
 composer install
@@ -68,13 +65,8 @@ cp .env.example .env
 # Generate application key
 php artisan key:generate
 
-# Set up database in .env file, then run:
+# Configure your database in .env file, then run:
 php artisan migrate
 
 # Start the server
 php artisan serve
-
-👨‍💻 Author
-
-**Mubeen Zahid**
-GitHub: https://github.com/MubeenZahid-294
