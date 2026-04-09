@@ -1,0 +1,110 @@
+@extends('contacts.layout')
+@section('page-title', 'Edit Contact')
+@section('page-subtitle', 'Update the details below')
+
+@section('content')
+<div class="max-w-2xl">
+    <div class="bg-white rounded-xl border border-slate-200 p-6">
+        <form action="{{ route('contacts.update', $contact) }}" method="POST"
+              enctype="multipart/form-data" class="space-y-5">
+            @csrf @method('PUT')
+            <div class="grid grid-cols-2 gap-4">
+
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">Full Name <span class="text-red-500">*</span></label>
+                    <input type="text" name="name" value="{{ old('name', $contact->name) }}"
+                           class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 @error('name') border-red-400 @enderror">
+                    @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">Company</label>
+                    <input type="text" name="company" value="{{ old('company', $contact->company) }}"
+                           class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+                    <input type="email" name="email" value="{{ old('email', $contact->email) }}"
+                           class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 @error('email') border-red-400 @enderror">
+                    @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">Phone</label>
+                    <input type="text" name="phone" value="{{ old('phone', $contact->phone) }}"
+                           class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+
+                <div class="col-span-2">
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">Address</label>
+                    <textarea name="address" rows="2"
+                              class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">{{ old('address', $contact->address) }}</textarea>
+                </div>
+
+                {{-- Profile Photo --}}
+                <div class="col-span-2">
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">Profile Photo</label>
+
+                    {{-- Show current photo if exists --}}
+                    @if($contact->photo)
+                        <div class="mb-3 flex items-center gap-3">
+                            <img src="{{ Storage::url($contact->photo) }}"
+                                 class="w-14 h-14 rounded-full object-cover border-2 border-slate-200">
+                            <span class="text-xs text-slate-400">Current photo</span>
+                        </div>
+                    @endif
+
+                    <input type="file" name="photo" accept="image/*"
+                           class="w-full border border-slate-200 rounded-lg px-4 py-2 text-sm text-slate-500
+                                  file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0
+                                  file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600
+                                  hover:file:bg-brand-100 cursor-pointer">
+                    <p class="text-xs text-slate-400 mt-1">Leave empty to keep current photo</p>
+                    @error('photo')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+            </div>
+            {{-- Tags --}}
+            @if($userTags->count() > 0)
+            <div class="col-span-2">
+                <label class="block text-sm font-medium text-slate-700 mb-2">Tags</label>
+                <div class="flex flex-wrap gap-2">
+                    @foreach($userTags as $tag)
+                    <label class="flex items-center gap-1.5 cursor-pointer">
+                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}"
+                               {{ $contact->tags->contains($tag->id) ? 'checked' : '' }}
+                               class="rounded border-slate-300 text-brand-600">
+                        <span @class([
+                            'px-2.5 py-1 rounded-full text-xs font-medium',
+                            'bg-indigo-100 text-indigo-700' => $tag->color === 'indigo',
+                            'bg-blue-100 text-blue-700'     => $tag->color === 'blue',
+                            'bg-green-100 text-green-700'   => $tag->color === 'green',
+                            'bg-yellow-100 text-yellow-700' => $tag->color === 'yellow',
+                            'bg-red-100 text-red-700'       => $tag->color === 'red',
+                            'bg-pink-100 text-pink-700'     => $tag->color === 'pink',
+                        ])>{{ $tag->name }}</span>
+                    </label>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            {{-- Submit Buttons --}}
+            <div class="flex gap-3 pt-2">
+                <button type="submit"
+                        class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-6 py-2.5 rounded-lg transition">
+                    Update Contact
+                </button>
+                <a href="{{ route('contacts.index') }}"
+                   class="bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-medium px-6 py-2.5 rounded-lg transition">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
+@endsection
