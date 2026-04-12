@@ -1,63 +1,88 @@
-# 📇 Laravel Contact Manager
+# 📒 ContactBook
 
-A modern and feature-rich **Contact Management System** built with Laravel.  
-This project goes beyond basic CRUD and provides advanced functionalities like search, filtering, favorites, tagging, and CSV export.
+A full-featured Contact Management System built with Laravel 12, Blade, and Tailwind CSS.
 
----
+## ✨ Features
 
-## 🚀 Features
+### Core CRUD
+- Create, Read, Update, Delete contacts
+- Profile photo upload for each contact
+- Per-user data isolation
 
-### 🔹 Core Functionality
-- Create, Read, Update, Delete (CRUD)
-- Clean and responsive contact listing (Card UI)
+### Advanced Features
+- 🔐 Authentication (Register, Login, Logout)
+- 🔍 Live Search (no page reload)
+- 📊 Dashboard with stats chart
+- ⭐ Favorite / Unfavorite contacts
+- 🏷️ Contact Groups & Tags
+- 📤 Export contacts to CSV
+- 🌙 Dark Mode (saves preference)
+- 🔔 Notifications system
+- 🔒 Profile & Password settings
+- 📱 QR Code for each contact
 
-### 🔹 Advanced Features
-- Real-time Search (name, email, phone, company)
-- Sorting (Ascending / Descending)
-- Mark contacts as Favorites
-- Tag system (Family, Work, Friend)
-- Dashboard statistics (Total, Favorites, This Page)
-- Export contacts to CSV
+### Validation
+- Strong password rules (uppercase, lowercase, number, symbol)
+- Real-time field validation
+- Password strength meter
+- Show/Hide password toggle
 
-### 🔹 UI/UX
-- Modern sidebar navigation
-- Dark Mode support
-- Smooth and user-friendly interface
-
----
+### Events & Listeners
+- ContactCreated event
+- ContactUpdated event
+- ContactDeleted event
+- All events logged to laravel.log
 
 ## 🛠️ Tech Stack
 
-- Backend: Laravel (PHP)
-- Frontend: Blade / Bootstrap / CSS
-- Database: MySQL
-- Tools: Composer, Artisan CLI
+| Technology | Usage |
+|---|---|
+| Laravel 12 | Backend Framework |
+| Blade | Templating Engine |
+| Tailwind CSS | Styling |
+| SQLite | Database |
+| Laravel Breeze | Authentication |
+| Vite | Asset Bundling |
 
----
-
-## 🎥 Demo Video
-
-👉 https://drive.google.com/file/d/1KleNE6684SZwiS9s9TtbmYkzfdzdnGLA/view
-
----
-
-## 📸 Screenshots
-
-👉 https://drive.google.com/file/d/1qgXD5TZYq0i9X-FnzjR3HYUM-VNRVeX3/view
-
----
-
-## ⚙️ Installation & Setup
+## ⚙️ Installation
 
 ```bash
-git clone https://github.com/MubeenZahid-294/contact-book-crud-laravel.git
-cd contact-book
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate
-php artisan serve
+# Clone the repository
+git clone https://github.com/MubeenZahid-294/contact-book-validations-events.git
 
-👨‍💻 Author 
+# Navigate to project
+cd contact-book
+
+# Install PHP dependencies
+composer install
+
+# Install JS dependencies
+npm install
+
+# Copy environment file
+cp .env.example .env
+
+# Generate app key
+php artisan key:generate
+
+# Create storage link
+php artisan storage:link
+
+# Run migrations
+php artisan migrate
+
+# Start the servers
+php artisan serve
+npm run dev
+```
+
+## 📋 Requirements
+
+- PHP 8.2+
+- Composer
+- Node.js & NPM
+- Laravel 12
+
+## 👨‍💻 Developer
+
 Mubeen Zahid
-GitHub: https://github.com/MubeenZahid-294
