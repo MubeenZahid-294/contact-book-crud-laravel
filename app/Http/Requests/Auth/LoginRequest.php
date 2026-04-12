@@ -26,12 +26,27 @@ class LoginRequest extends FormRequest
      * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
-        return [
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
-        ];
-    }
+{
+    return [
+        'email'    => [
+            'required',
+            'email',
+        ],
+        'password' => [
+            'required',
+            'min:8',
+        ],
+    ];
+}
+    public function messages(): array
+{
+    return [
+        'email.required'    => 'Email address is required.',
+        'email.email'       => 'Please enter a valid email address.',
+        'password.required' => 'Password is required.',
+        'password.min'      => 'Password must be at least 8 characters.',
+    ];
+}
 
     /**
      * Attempt to authenticate the request's credentials.

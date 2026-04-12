@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ContactCreated;
+use App\Events\ContactUpdated;
+use App\Events\ContactDeleted;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use App\Helpers\NotificationHelper;
@@ -70,15 +73,58 @@ class ContactController extends Controller
     public function store(Request $request)
 {
     $data = $request->validate([
-        'name'    => 'required|string|max:100',
-        'email'   => 'nullable|email|max:100',
-        'phone'   => 'nullable|string|max:20',
-        'company' => 'nullable|string|max:100',
-        'address' => 'nullable|string|max:255',
-        'photo'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        'tags'    => 'nullable|array',
-        'tags.*'  => 'exists:tags,id',
-    ]);
+    'name'    => [
+        'required',
+        'string',
+        'min:3',
+        'max:100',
+        'regex:/^[a-zA-Z\s]+$/'
+    ],
+    'email'   => [
+        'nullable',
+        'email',
+        'max:100',
+    ],
+    'phone'   => [
+        'nullable',
+        'string',
+        'min:7',
+        'max:15',
+        'regex:/^[0-9\+\-\s]+$/'
+    ],
+    'company' => [
+        'nullable',
+        'string',
+        'min:2',
+        'max:100',
+    ],
+    'address' => [
+        'nullable',
+        'string',
+        'max:255',
+    ],
+    'photo'   => [
+        'nullable',
+        'image',
+        'mimes:jpg,jpeg,png,webp',
+        'max:2048',
+    ],
+    'tags'    => 'nullable|array',
+    'tags.*'  => 'exists:tags,id',
+], [
+    'name.required' => 'Contact name is required.',
+    'name.min'      => 'Name must be at least 3 characters.',
+    'name.max'      => 'Name cannot exceed 100 characters.',
+    'name.regex'    => 'Name can only contain letters and spaces.',
+    'email.email'   => 'Please enter a valid email address.',
+    'phone.min'     => 'Phone number must be at least 7 digits.',
+    'phone.max'     => 'Phone number cannot exceed 15 digits.',
+    'phone.regex'   => 'Phone can only contain numbers, +, - and spaces.',
+    'company.min'   => 'Company name must be at least 2 characters.',
+    'photo.image'   => 'File must be an image.',
+    'photo.mimes'   => 'Image must be jpg, jpeg, png or webp.',
+    'photo.max'     => 'Image size cannot exceed 2MB.',
+]);
 
     if ($request->hasFile('photo')) {
         $data['photo'] = $request->file('photo')->store('photos', 'public');
@@ -86,6 +132,9 @@ class ContactController extends Controller
 
     $data['user_id'] = auth()->id();
     $contact = Contact::create($data);
+
+// Fire event
+event(new ContactCreated($contact));
 
     if ($request->filled('tags')) {
         $contact->tags()->sync($request->tags);
@@ -115,15 +164,58 @@ return redirect()->route('contacts.index')
     abort_if($contact->user_id !== auth()->id(), 403);
 
     $data = $request->validate([
-        'name'    => 'required|string|max:100',
-        'email'   => 'nullable|email|max:100',
-        'phone'   => 'nullable|string|max:20',
-        'company' => 'nullable|string|max:100',
-        'address' => 'nullable|string|max:255',
-        'photo'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        'tags'    => 'nullable|array',
-        'tags.*'  => 'exists:tags,id',
-    ]);
+    'name'    => [
+        'required',
+        'string',
+        'min:3',
+        'max:100',
+        'regex:/^[a-zA-Z\s]+$/'
+    ],
+    'email'   => [
+        'nullable',
+        'email',
+        'max:100',
+    ],
+    'phone'   => [
+        'nullable',
+        'string',
+        'min:7',
+        'max:15',
+        'regex:/^[0-9\+\-\s]+$/'
+    ],
+    'company' => [
+        'nullable',
+        'string',
+        'min:2',
+        'max:100',
+    ],
+    'address' => [
+        'nullable',
+        'string',
+        'max:255',
+    ],
+    'photo'   => [
+        'nullable',
+        'image',
+        'mimes:jpg,jpeg,png,webp',
+        'max:2048',
+    ],
+    'tags'    => 'nullable|array',
+    'tags.*'  => 'exists:tags,id',
+], [
+    'name.required' => 'Contact name is required.',
+    'name.min'      => 'Name must be at least 3 characters.',
+    'name.max'      => 'Name cannot exceed 100 characters.',
+    'name.regex'    => 'Name can only contain letters and spaces.',
+    'email.email'   => 'Please enter a valid email address.',
+    'phone.min'     => 'Phone number must be at least 7 digits.',
+    'phone.max'     => 'Phone number cannot exceed 15 digits.',
+    'phone.regex'   => 'Phone can only contain numbers, +, - and spaces.',
+    'company.min'   => 'Company name must be at least 2 characters.',
+    'photo.image'   => 'File must be an image.',
+    'photo.mimes'   => 'Image must be jpg, jpeg, png or webp.',
+    'photo.max'     => 'Image size cannot exceed 2MB.',
+]);
 
     if ($request->hasFile('photo')) {
         if ($contact->photo) {
@@ -133,6 +225,9 @@ return redirect()->route('contacts.index')
     }
 
     $contact->update($data);
+
+// Fire event
+event(new ContactUpdated($contact));
     $contact->tags()->sync($request->tags ?? []);
 
     NotificationHelper::create("Updated contact: {$contact->name}", 'info', 'edit');
@@ -150,6 +245,10 @@ return redirect()->route('contacts.index')
     }
 
     $contact->delete();
+    // Fire event before deleting
+event(new ContactDeleted($contact));
+
+$contact->delete();
 
     NotificationHelper::create("Deleted contact: {$contact->name}", 'danger', 'delete');
 

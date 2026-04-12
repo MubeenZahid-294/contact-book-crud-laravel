@@ -8,6 +8,19 @@
         <form action="{{ route('contacts.store') }}" method="POST"
               enctype="multipart/form-data" class="space-y-5">
             @csrf
+            {{-- Validation Error Summary --}}
+@if($errors->any())
+<div class="col-span-2 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+    <p class="text-red-600 text-sm font-medium mb-1">
+        Please fix the following errors:
+    </p>
+    <ul class="list-disc list-inside space-y-0.5">
+        @foreach($errors->all() as $error)
+            <li class="text-red-500 text-xs">{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
             <div class="grid grid-cols-2 gap-4">
 
                 <div class="col-span-2 sm:col-span-1">
@@ -95,4 +108,45 @@
         </form>
     </div>
 </div>
+<script>
+// Real-time name validation
+document.querySelector('input[name="name"]').addEventListener('input', function() {
+    const val     = this.value;
+    const error   = document.getElementById('nameError');
+    const isValid = /^[a-zA-Z\s]+$/.test(val) && val.length >= 3;
+
+    this.classList.toggle('border-red-400',   !isValid && val.length > 0);
+    this.classList.toggle('border-green-400',  isValid);
+
+    if (error) {
+        error.textContent = !isValid && val.length > 0
+            ? (val.length < 3 ? 'Name must be at least 3 characters.' : 'Name can only contain letters.')
+            : '';
+    }
+});
+
+// Real-time phone validation
+const phoneInput = document.querySelector('input[name="phone"]');
+if (phoneInput) {
+    phoneInput.addEventListener('input', function() {
+        const val     = this.value;
+        const isValid = /^[0-9\+\-\s]+$/.test(val) && val.length >= 7;
+
+        this.classList.toggle('border-red-400',  !isValid && val.length > 0);
+        this.classList.toggle('border-green-400', isValid);
+    });
+}
+
+// Real-time email validation
+const emailInput = document.querySelector('input[name="email"]');
+if (emailInput) {
+    emailInput.addEventListener('input', function() {
+        const val     = this.value;
+        const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+
+        this.classList.toggle('border-red-400',  !isValid && val.length > 0);
+        this.classList.toggle('border-green-400', isValid && val.length > 0);
+    });
+}
+</script>
 @endsection
