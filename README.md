@@ -57,3 +57,7 @@ cp .env.example .env
 php artisan key:generate
 php artisan migrate
 php artisan serve
+
+👨‍💻 Author 
+Mubeen Zahid
+GitHub: https://github.com/MubeenZahid-294
