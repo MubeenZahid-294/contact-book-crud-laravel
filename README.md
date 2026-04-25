@@ -2,6 +2,8 @@
 
 A full-featured Contact Management System built with Laravel 12, Blade, and Tailwind CSS.
 
+Demo video[https://drive.google.com/file/d/1KleNE6684SZwiS9s9TtbmYkzfdzdnGLA/view?usp=drive_link)
+
 ## ✨ Features
 
 ### Core CRUD
